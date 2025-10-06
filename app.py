@@ -7,7 +7,9 @@ import tempfile
 
 app = Flask(__name__)
 
-PLACEHOLDERS = ["nombre", "monto_pagare", "monto_demandado", "direccion", "rut", "fecha_suscripcion", "fecha_primera_cuota", "cantidad_cuotas", "dia_pago", "comuna_exhorto"]
+PLACEHOLDERS = ["nombre", "monto_total_pagare",	"cuotas_pagare",	"valor_cuota",	"dia_pago",	"fecha_primera_cuota", "direccion", "rut", "fecha_suscripcion", "cuotas_pagadas", "monto_deuda_pagare",	"monto_total_pagare2",	"monto_deuda_pagare2",	"fecha_suscripcion2"	"cuotas_pagare2",	"valor_cuota2",	"dia_pago2",	"fecha_primera_cuota2",	"cuotas_pagadas2"	"total_demandado",	"comuna_exhorto"]
+
+numeric_fields = ["monto_total_pagare", "monto_deuda_pagare", "monto_total_pagare2", "monto_deuda_pagare2", "valor_cuota", "valor_cuota2", "total_demandado"]
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -37,7 +39,7 @@ def index():
                         value = row.get(ph, "")
                         if str(value).strip().lower() in ('nan', ''):
                             value = ""
-                        if (ph == "monto_pagare" or ph == "monto_demandado") and value:
+                        if (ph in numeric_fields) and value:
                             try:
                                 clean_value = "".join(filter(str.isdigit, str(value)))
                                 value = f"{int(clean_value):,}".replace(",", ".")
