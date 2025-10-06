@@ -13,7 +13,7 @@ COPY app.py ./
 COPY templates ./templates
 
 # Expose Flask port
-EXPOSE 5000
+EXPOSE 6969
 
 # Run the Flask app
 CMD ["python", "app.py"]
