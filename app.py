@@ -74,11 +74,11 @@ def index():
                     doc.render(context)
 
                     # Nombre de archivo de salida
-                    if template_type == 'pagare':
-                        safe_name = str(row.get("nombre", f"Documento_{index+1}"))
-                    else:
-                        safe_name = str(row.get("apellido_demandado", f"Documento_{index+1}"))
-                    safe_name = safe_name.replace(" ", "_").replace("/", "_")
+                    name_key = "nombre" if template_type == 'pagare' else "apellido_demandado"
+                    name_val = str(row.get(name_key, "")).strip()
+                    if name_val.lower() in ('nan', '', 'none'):
+                        name_val = f"Documento_{index+1}"
+                    safe_name = name_val.replace(" ", "_").replace("/", "_")
 
                     output_path = os.path.join(output_dir, f"{safe_name}.docx")
                     doc.save(output_path)
@@ -104,4 +104,5 @@ def index():
             
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    debug = os.environ.get('FLASK_DEBUG', '0') == '1'
+    app.run(host='0.0.0.0', port=6969, debug=debug)
